@@ -1,4 +1,5 @@
 import { CourierClient } from "@trycourier/courier";
+import notificationapi from 'notificationapi-node-server-sdk'
 import express from 'express';
 import cors from 'cors';
 const app = express();
@@ -8,6 +9,10 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 const courier = new CourierClient({ authorizationToken: "pk_prod_BDF878SPXPMDR1KHA20DB23RZVYA" });
+notificationapi.init(
+    '2d60t1vfbmkm9d4p1jfpr35m1m', // clientId
+    '138n9ka0aadurtjkfnsv1qm549abq9jjgsc5kdp2jtdrtn52pk62'// clientSecret
+)
 const employees = [
     { id: 1, name: 'John Doe', department: 'Engineering' },
     { id: 2, name: 'Jane Smith', department: 'Marketing' },
@@ -66,6 +71,26 @@ app.get('/send-sms', async (req, res) => {
                 },
             },
         });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+app.get('/sms', async (req, res) => {
+    try {
+        notificationapi.send({
+            notificationId: 'order_tracking',
+            user: {
+                id: "root.ap.11@gmail.com",
+                email: "root.ap.11@gmail.com",
+                number: "+918009225514"
+            },
+            mergeTags: {
+                item: 'Krabby Patty Burger',
+                address: '124 Conch Street',
+                orderId: '1234567890'
+            }
+        })
     } catch (error) {
         res.status(500).send(error);
     }
