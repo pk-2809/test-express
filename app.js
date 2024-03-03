@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('./cors');
-const notify = require('notificationapi-node-server-sdk');
+const notificationapi = require('notificationapi-node-server-sdk').default;
 const app = express();
 
 app.use(cors);
-notify.init(
+notificationapi.init(
     '2d60t1vfbmkm9d4p1jfpr35m1m', // clientId
     '138n9ka0aadurtjkfnsv1qm549abq9jjgsc5kdp2jtdrtn52pk62'// clientSecret
 )
@@ -22,7 +22,7 @@ app.get('/employees', (req, res) => {
 
 app.get('/send', async (req, res) => {
     try {
-        const response = await notify.send({
+        const response = await notificationapi.send({
             notificationId: 'order_tracking',
             user: {
                 id: "root.ap.11@gmail.com",
@@ -35,7 +35,7 @@ app.get('/send', async (req, res) => {
                 orderId: '1234567890'
             }
         })
-        res.send('Notification sent (or success message)')
+        res.send('Notification sent (or success message)', response);
     } catch (error) {
         res.status(500).send(error);
     }
