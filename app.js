@@ -1,8 +1,12 @@
 import { CourierClient } from "@trycourier/courier";
 import express from 'express';
-import cors from './cors';
+import cors from 'cors';
 const app = express();
-app.use(cors);
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET',
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 const employees = [
     { id: 1, name: 'John Doe', department: 'Engineering' },
