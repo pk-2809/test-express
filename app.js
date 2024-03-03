@@ -1,5 +1,5 @@
 import { CourierClient } from "@trycourier/courier";
-import notificationapi from 'notificationapi-node-server-sdk'
+import { notificationapi } from 'notificationapi-node-server-sdk'
 import express from 'express';
 import cors from 'cors';
 const app = express();
@@ -9,7 +9,9 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 const courier = new CourierClient({ authorizationToken: "pk_prod_BDF878SPXPMDR1KHA20DB23RZVYA" });
-notificationapi.init(
+
+const notify = new notificationapi();
+notify.init(
     '2d60t1vfbmkm9d4p1jfpr35m1m', // clientId
     '138n9ka0aadurtjkfnsv1qm549abq9jjgsc5kdp2jtdrtn52pk62'// clientSecret
 )
@@ -46,31 +48,6 @@ app.get('/send-email', async (req, res) => {
             },
         });
         res.send("Notification Sent", requestId);
-    } catch (error) {
-        res.status(500).send(error);
-    }
-})
-
-app.get('/send-sms', async (req, res) => {
-    try {
-        const { requestId } = await courier.send({
-            message: {
-                to: {
-                    data: {
-                        name: "Jenny",
-                    },
-                    phone_number: "8009225514",
-                },
-                content: {
-                    title: "Back to the Future",
-                    body: "Oh my {{name}}, we need 1.21 Gigawatts!",
-                },
-                routing: {
-                    method: "single",
-                    channels: ["sms"],
-                },
-            },
-        });
     } catch (error) {
         res.status(500).send(error);
     }
