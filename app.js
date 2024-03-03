@@ -7,7 +7,7 @@ app.use(cors({
     methods: 'GET',
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
+const courier = new CourierClient({ authorizationToken: "pk_prod_BDF878SPXPMDR1KHA20DB23RZVYA" });
 const employees = [
     { id: 1, name: 'John Doe', department: 'Engineering' },
     { id: 2, name: 'Jane Smith', department: 'Marketing' },
@@ -20,9 +20,8 @@ app.get('/employees', (req, res) => {
     res.json(employees);
 });
 
-app.get('/send', async (req, res) => {
+app.get('/send-email', async (req, res) => {
     try {
-        const courier = new CourierClient({ authorizationToken: "pk_prod_BDF878SPXPMDR1KHA20DB23RZVYA" });
         const { requestId } = await courier.send({
             message: {
                 to: {
@@ -42,6 +41,31 @@ app.get('/send', async (req, res) => {
             },
         });
         res.send("Notification Sent", requestId);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+app.get('/send-sms', async (req, res) => {
+    try {
+        const { requestId } = await courier.send({
+            message: {
+                to: {
+                    data: {
+                        name: "Jenny",
+                    },
+                    phone_number: "8009225514",
+                },
+                content: {
+                    title: "Back to the Future",
+                    body: "Oh my {{name}}, we need 1.21 Gigawatts!",
+                },
+                routing: {
+                    method: "single",
+                    channels: ["sms"],
+                },
+            },
+        });
     } catch (error) {
         res.status(500).send(error);
     }
