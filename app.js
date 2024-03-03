@@ -26,12 +26,12 @@ app.get('/send', async (req, res) => {
             notificationId: 'order_tracking',
             user: {
                 id: "root.ap.11@gmail.com",
-                email: "root.ap.11@gmail.com",
-                number: "+918009225514"
+                email: "apeksha16verma@gmail.com",
+                number: "+917668804527"
             },
             mergeTags: {
-                item: 'Krabby Patty Burger',
-                address: '124 Conch Street',
+                item: 'Your Stagger',
+                address: 'Awas Vikas',
                 orderId: '1234567890'
             }
         })
