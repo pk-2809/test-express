@@ -39,11 +39,9 @@ app.get('/send', async (req, res) => {
                 }
             }
         });
-        console.log(requestId);
-        res.send("Notification Sent");
+        res.send("Notification Sent", requestId);
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Error sending notification");
+        res.status(500).send(error);
     }
 })
 
