@@ -1,6 +1,9 @@
 const express = require('express');
+const cors = require('./cors');
 
 const app = express();
+
+app.use(cors);
 
 // Define the employee data (replace with database connection if needed)
 const employees = [
