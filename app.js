@@ -30,7 +30,7 @@ app.get('/send', async (req, res) => {
                 number: "+917668804527"
             },
             mergeTags: {
-                item: 'Your Stagger',
+                item: 'Stagger',
                 address: 'Awas Vikas',
                 orderId: '1234567890'
             }
