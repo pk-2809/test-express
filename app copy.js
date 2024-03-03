@@ -1,9 +1,16 @@
-const express = require('express');
-const cors = require('./cors');
-const notify = require('notificationapi-node-server-sdk');
+import { CourierClient } from "@trycourier/courier";
+import { notificationapi } from 'notificationapi-node-server-sdk'
+import express from 'express';
+import cors from 'cors';
 const app = express();
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET',
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+const courier = new CourierClient({ authorizationToken: "pk_prod_BDF878SPXPMDR1KHA20DB23RZVYA" });
 
-app.use(cors);
+const notify = new notificationapi();
 notify.init(
     '2d60t1vfbmkm9d4p1jfpr35m1m', // clientId
     '138n9ka0aadurtjkfnsv1qm549abq9jjgsc5kdp2jtdrtn52pk62'// clientSecret
@@ -20,7 +27,33 @@ app.get('/employees', (req, res) => {
     res.json(employees);
 });
 
-app.get('/send', async (req, res) => {
+app.get('/send-email', async (req, res) => {
+    try {
+        const { requestId } = await courier.send({
+            message: {
+                to: {
+                    data: {
+                        name: "Marty",
+                    },
+                    email: "prnvkatiyar@gmail.com",
+                },
+                content: {
+                    title: "Back to the Future",
+                    body: "Oh my darling, we need 1.21 Gigawatts!",
+                },
+                routing: {
+                    method: "single",
+                    channels: ["email"],
+                },
+            },
+        });
+        res.send("Notification Sent", requestId);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
+app.get('/sms', async (req, res) => {
     try {
         const response = await notify.send({
             notificationId: 'order_tracking',
@@ -41,7 +74,6 @@ app.get('/send', async (req, res) => {
     }
 })
 
-// Start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
