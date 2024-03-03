@@ -22,22 +22,24 @@ app.get('/employees', (req, res) => {
 
 app.get('/send', async (req, res) => {
     try {
-        const courier = CourierClient({
-            authorizationToken: process.env.COURIER_API_KEY || "pk_prod_BDF878SPXPMDR1KHA20DB23RZVYA"
-        });
+        const courier = new CourierClient({ authorizationToken: "pk_prod_BDF878SPXPMDR1KHA20DB23RZVYA" });
         const { requestId } = await courier.send({
             message: {
-                content: {
-                    title: "Welcome to Courier!",
-                    body: "Want to hear a joke?"
-                },
-                data: {
-                    joke: "Why was the JavaScript developer sad? Because they didn't Node how to Express themselves"
-                },
                 to: {
-                    email: "prnvkatiyar@gmail.com"
-                }
-            }
+                    data: {
+                        name: "Marty",
+                    },
+                    email: "prnvkatiyar@gmail.com",
+                },
+                content: {
+                    title: "Back to the Future",
+                    body: "Oh my darling, we need 1.21 Gigawatts!",
+                },
+                routing: {
+                    method: "single",
+                    channels: ["email"],
+                },
+            },
         });
         res.send("Notification Sent", requestId);
     } catch (error) {
