@@ -23,7 +23,7 @@ app.get('/employees', (req, res) => {
 app.get('/send', async (req, res) => {
     try {
         const response = await notificationapi.send({
-            notificationId: 'order_tracking',
+            notificationId: 'your_manager',
             user: {
                 id: "root.ap.11@gmail.com",
                 email: "apeksha16verma@gmail.com",
